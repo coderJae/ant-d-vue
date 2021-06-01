@@ -1,5 +1,12 @@
 @import "~ant-design-vue/es/style/themes/default.less";
 
+.ant-pro-sider-menu-sider.light .ant-pro-sider-menu-logo , .ant-pro-sider-menu-sider.fix-sider-bar , .ant-pro-sider-menu-sider{
+  box-shadow:none;
+}
+.ant-pro-sider-menu-logo{
+  box-shadow:2px 0 8px 0 rgb(29 35 41 / 5%);
+}
+
 .ant-pro-global-header-index-right {
   margin-right: 8px;
 
@@ -24,8 +31,14 @@
   }
 
   .menu {
+    .ant-pro-sider-menu-sider.light{
+      box-shadow:2px 0 8px 0 rgb(29 35 41 / 5%);
+    }
     .anticon {
       margin-right: 8px;
+    }
+    .ant-menu-item > a::before{
+      background:yellow;
     }
 
     .ant-dropdown-menu-item {
