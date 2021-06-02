@@ -1,98 +1,61 @@
 <template>
-  <div class="page-header-index-wide page-header-wrapper-grid-content-main">
-    <a-row :gutter="24">
-      <a-col :md="24" :lg="7">
-        <a-card :bordered="false">
-          <div class="account-center-avatarHolder">
-            <div class="avatar">
-              <img :src="avatar">
-            </div>
-            <div class="username">{{ nickname }}</div>
-            <div class="bio">海纳百川，有容乃大</div>
-          </div>
-          <div class="account-center-detail">
-            <p>
-              <i class="title"></i>交互专家
-            </p>
-            <p>
-              <i class="group"></i>蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED
-            </p>
-            <p>
-              <i class="address"></i>
-              <span>浙江省</span>
-              <span>杭州市</span>
-            </p>
-          </div>
-          <a-divider/>
-
-          <div class="account-center-tags">
-            <div class="tagsTitle">标签</div>
-            <div>
-              <template v-for="(tag, index) in tags">
-                <a-tooltip v-if="tag.length > 20" :key="tag" :title="tag">
-                  <a-tag
-                    :key="tag"
-                    :closable="index !== 0"
-                    :close="() => handleTagClose(tag)"
-                  >{{ `${tag.slice(0, 20)}...` }}</a-tag>
-                </a-tooltip>
-                <a-tag
-                  v-else
-                  :key="tag"
-                  :closable="index !== 0"
-                  :close="() => handleTagClose(tag)"
-                >{{ tag }}</a-tag>
-              </template>
-              <a-input
-                v-if="tagInputVisible"
-                ref="tagInput"
-                type="text"
-                size="small"
-                :style="{ width: '78px' }"
-                :value="tagInputValue"
-                @change="handleInputChange"
-                @blur="handleTagInputConfirm"
-                @keyup.enter="handleTagInputConfirm"
-              />
-              <a-tag v-else @click="showTagInput" style="background: #fff; borderStyle: dashed;">
-                <a-icon type="plus"/>New Tag
-              </a-tag>
-            </div>
-          </div>
-          <a-divider :dashed="true"/>
-
-          <div class="account-center-team">
-            <div class="teamTitle">团队</div>
-            <a-spin :spinning="teamSpinning">
-              <div class="members">
-                <a-row>
-                  <a-col :span="12" v-for="(item, index) in teams" :key="index">
-                    <a>
-                      <a-avatar size="small" :src="item.avatar"/>
-                      <span class="member">{{ item.name }}</span>
-                    </a>
-                  </a-col>
-                </a-row>
-              </div>
-            </a-spin>
-          </div>
-        </a-card>
-      </a-col>
-      <a-col :md="24" :lg="17">
-        <a-card
-          style="width:100%"
-          :bordered="false"
-          :tabList="tabListNoTitle"
-          :activeTabKey="noTitleKey"
-          @tabChange="key => handleTabChange(key, 'noTitleKey')"
+  <a-card>
+    <div class="topic">账号管理</div>
+    <a-form-model layout="inline" :model="formInline" @submit="handleSubmit" @submit.native.prevent>
+      <a-form-model-item>
+        <a-input v-model="formInline.name" placeholder="请输入名称"></a-input>
+      </a-form-model-item>
+      <a-form-model-item>
+        <a-select v-model="formInline.region" style="width:200px" placeholder="请选择用户类型">
+          <a-select-option value="shanghai">
+            Zone one
+          </a-select-option>
+          <a-select-option value="beijing">
+            Zone two
+          </a-select-option>
+        </a-select>
+      </a-form-model-item>
+      <a-form-model-item>
+        <a-select v-model="formInline.state" style="width:200px" placeholder="请选择用户状态">
+          <a-select-option value="shanghai">
+            Zone one
+          </a-select-option>
+          <a-select-option value="beijing">
+            Zone two
+          </a-select-option>
+        </a-select>
+      </a-form-model-item>
+      <a-form-model-item>
+        <a-button
+          type="primary"
+          html-type="submit"
+          :disabled="formInline.user === '' || formInline.password === ''"
         >
-          <article-page v-if="noTitleKey === 'article'"></article-page>
-          <app-page v-else-if="noTitleKey === 'app'"></app-page>
-          <project-page v-else-if="noTitleKey === 'project'"></project-page>
-        </a-card>
-      </a-col>
-    </a-row>
-  </div>
+          查询
+        </a-button>
+      </a-form-model-item>
+    </a-form-model>
+    <a-table :columns="columns" :data-source="data" :pagination="pagination" @change="tableChange" style="margin-top:30px">
+      <a slot="name" slot-scope="text">{{ text }}</a>
+      <span slot="customTitle"> Name</span>
+      <span slot="tags" slot-scope="tags">
+        <a-tag
+          v-for="tag in tags"
+          :key="tag"
+          :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'"
+        >
+          {{ tag.toUpperCase() }}
+        </a-tag>
+      </span>
+      <span slot="action" slot-scope="text, record">
+        <a>Invite 一 {{ record.name }}</a>
+        <a-divider type="vertical" />
+        <a>Delete</a>
+        <a-divider type="vertical" />
+        <a class="ant-dropdown-link"> More actions <a-icon type="down" /> </a>
+      </span>
+    </a-table>
+  </a-card>
 </template>
 
 <script>
@@ -111,8 +74,73 @@ export default {
   },
   data () {
     return {
-      tags: ['很有想法的', '专注设计', '辣~', '大长腿', '川妹子', '海纳百川'],
-
+      formInline: {
+        name: '',
+        region: undefined,
+        state: undefined
+      },
+      columns: [
+        {
+          title: '序号',
+          customRender: (text, record, index) => `${(this.pagination.current - 1) * this.pagination.pageSize + index + 1}`
+        },
+        {
+          title: '名称',
+          dataIndex: 'name',
+          key: 'name',
+          slots: { title: 'customTitle' },
+          scopedSlots: { customRender: 'name' }
+        },
+        {
+          title: '用户类型',
+          dataIndex: 'age',
+          key: 'age'
+        },
+        {
+          title: '联系方式',
+          dataIndex: 'address',
+          key: 'address'
+        },
+        {
+          title: '用户状态',
+          key: 'tags',
+          dataIndex: 'tags',
+          scopedSlots: { customRender: 'tags' }
+        },
+        {
+          title: 'Action',
+          key: 'action',
+          scopedSlots: { customRender: 'action' }
+        }
+      ],
+      data: [
+        {
+          key: '1',
+          name: 'John Brown',
+          age: 32,
+          address: 'New York No. 1 Lake Park',
+          tags: ['nice', 'developer']
+        },
+        {
+          key: '2',
+          name: 'Jim Green',
+          age: 42,
+          address: 'London No. 1 Lake Park',
+          tags: ['loser']
+        },
+        {
+          key: '3',
+          name: 'Joe Black',
+          age: 32,
+          address: 'Sidney No. 1 Lake Park',
+          tags: ['cool', 'teacher']
+        }
+      ],
+      pagination: {
+        total: 1000,
+        current: 1,
+        pageSize: 10
+      },
       tagInputVisible: false,
       tagInputValue: '',
 
@@ -143,6 +171,12 @@ export default {
     this.getTeams()
   },
   methods: {
+    handleSubmit (e) {
+      console.log(this.formInline)
+    },
+    tableChange (e) {
+      this.pagination.current = e.current
+    },
     getTeams () {
       this.$http.get('/workplace/teams').then(res => {
         this.teams = res.result
@@ -188,102 +222,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.page-header-wrapper-grid-content-main {
-  width: 100%;
-  height: 100%;
-  min-height: 100%;
-  transition: 0.3s;
-
-  .account-center-avatarHolder {
-    text-align: center;
-    margin-bottom: 24px;
-
-    & > .avatar {
-      margin: 0 auto;
-      width: 104px;
-      height: 104px;
-      margin-bottom: 20px;
-      border-radius: 50%;
-      overflow: hidden;
-      img {
-        height: 100%;
-        width: 100%;
-      }
-    }
-
-    .username {
-      color: rgba(0, 0, 0, 0.85);
-      font-size: 20px;
-      line-height: 28px;
-      font-weight: 500;
-      margin-bottom: 4px;
-    }
-  }
-
-  .account-center-detail {
-    p {
-      margin-bottom: 8px;
-      padding-left: 26px;
-      position: relative;
-    }
-
-    i {
-      position: absolute;
-      height: 14px;
-      width: 14px;
-      left: 0;
-      top: 4px;
-      background: url(https://gw.alipayobjects.com/zos/rmsportal/pBjWzVAHnOOtAUvZmZfy.svg);
-    }
-
-    .title {
-      background-position: 0 0;
-    }
-    .group {
-      background-position: 0 -22px;
-    }
-    .address {
-      background-position: 0 -44px;
-    }
-  }
-
-  .account-center-tags {
-    .ant-tag {
-      margin-bottom: 8px;
-    }
-  }
-
-  .account-center-team {
-    .members {
-      a {
-        display: block;
-        margin: 12px 0;
-        line-height: 24px;
-        height: 24px;
-        .member {
-          font-size: 14px;
-          color: rgba(0, 0, 0, 0.65);
-          line-height: 24px;
-          max-width: 100px;
-          vertical-align: top;
-          margin-left: 12px;
-          transition: all 0.3s;
-          display: inline-block;
-        }
-        &:hover {
-          span {
-            color: #1890ff;
-          }
-        }
-      }
-    }
-  }
-
-  .tagsTitle,
-  .teamTitle {
-    font-weight: 500;
-    color: rgba(0, 0, 0, 0.85);
-    margin-bottom: 12px;
-  }
+.topic{
+  height:18px;
+  line-height:18px;
+  border-left:3px solid #1890ff;
+  padding-left:10px;
+  font-weight:bold;
+  font-size:16px;
+  letter-spacing:1px;
+  margin-bottom:30px;
 }
 </style>

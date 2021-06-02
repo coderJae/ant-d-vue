@@ -10,17 +10,18 @@
           <div class="header">
             <a href="/">
               <img src="~@/assets/logo.svg" class="logo" alt="logo">
-              <span class="title">Ant Design</span>
+              <span class="title">涉税服务一站通</span>
             </a>
           </div>
-          <div class="desc">
+          <!-- <div class="desc">
             {{ $t('layouts.userLayout.title') }}
-          </div>
+          </div> -->
         </div>
+        <a-card style="width: 450px;margin:30px auto">
+          <router-view />
+        </a-card>
 
-        <router-view />
-
-        <div class="footer">
+        <!-- <div class="footer">
           <div class="links">
             <a href="_self">帮助</a>
             <a href="_self">隐私</a>
@@ -29,7 +30,7 @@
           <div class="copyright">
             Copyright &copy; 2018 vueComponent
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -94,6 +95,7 @@ export default {
     }
 
     .user-layout-content {
+      margin-top:100px;
       padding: 32px 0 24px;
 
       .top {

@@ -97,7 +97,6 @@ export default {
         fixedHeader: defaultSettings.fixedHeader,
         fixSiderbar: defaultSettings.fixSiderbar,
         colorWeak: defaultSettings.colorWeak,
-
         hideHintAlert: false,
         hideCopyButton: false
       },
@@ -116,6 +115,7 @@ export default {
   },
   created () {
     const routes = this.mainMenu.find(item => item.path === '/')
+    console.log(routes, 'rrrrr')
     this.menus = (routes && routes.children) || []
     // 处理侧栏收起状态
     this.$watch('collapsed', () => {
