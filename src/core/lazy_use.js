@@ -30,6 +30,7 @@ import {
   Menu,
   Drawer,
   Tooltip,
+  Tree,
   Alert,
   Tag,
   Divider,
@@ -75,6 +76,7 @@ Vue.use(Table)
 Vue.use(Tabs)
 Vue.use(Icon)
 Vue.use(Badge)
+Vue.use(Tree)
 Vue.use(Popover)
 Vue.use(Dropdown)
 Vue.use(List)

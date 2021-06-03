@@ -1,10 +1,13 @@
 <template>
-  <editor
-    v-model="pushContent"
-    :init="init"
-    :disabled="disabled"
-    @onClick="onClick">
-  </editor>
+  <a-card>
+    <div class="topic">超市简介</div>
+    <editor
+      v-model="pushContent"
+      :init="init"
+      :disabled="disabled"
+      @onClick="onClick">
+    </editor>
+  </a-card>
 </template>
 
 <script>
@@ -100,3 +103,16 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+.topic{
+  height:18px;
+  line-height:18px;
+  border-left:3px solid #1890ff;
+  padding-left:10px;
+  font-weight:bold;
+  font-size:16px;
+  letter-spacing:1px;
+  margin-bottom:30px;
+}
+</style>

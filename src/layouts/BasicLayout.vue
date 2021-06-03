@@ -46,7 +46,7 @@
     </template>
     <!-- custom footer / 自定义Footer -->
     <template v-slot:footerRender>
-      <global-footer />
+      <!-- <global-footer /> -->
     </template>
     <router-view />
   </pro-layout>
