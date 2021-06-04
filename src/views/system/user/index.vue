@@ -67,7 +67,7 @@
         <a-form-model-item label="角色" prop="role">
           <a-select mode="multiple" v-model="form.role" placeholder="请选择角色">
             <a-select-option v-for="(item,index) in [1,2,3,4,5,6]" :key="index" :value="item">
-              {{'角色' + item }}
+              {{ '角色' + item }}
             </a-select-option>
           </a-select>
         </a-form-model-item>

@@ -59,9 +59,6 @@
 </template>
 
 <script>
-
-import { mapGetters } from 'vuex'
-
 export default {
   data () {
     return {
@@ -131,82 +128,12 @@ export default {
         total: 1000,
         current: 1,
         pageSize: 10
-      },
-      tagInputVisible: false,
-      tagInputValue: '',
-
-      teams: [],
-      teamSpinning: true,
-
-      tabListNoTitle: [
-        {
-          key: 'article',
-          tab: '文章(8)'
-        },
-        {
-          key: 'app',
-          tab: '应用(8)'
-        },
-        {
-          key: 'project',
-          tab: '项目(8)'
-        }
-      ],
-      noTitleKey: 'app'
+      }
     }
-  },
-  computed: {
-    ...mapGetters(['nickname', 'avatar'])
-  },
-  mounted () {
-    this.getTeams()
   },
   methods: {
     handleSubmit (e) {
       console.log(this.formInline)
-    },
-    tableChange (e) {
-      this.pagination.current = e.current
-    },
-    getTeams () {
-      this.$http.get('/workplace/teams').then(res => {
-        this.teams = res.result
-        this.teamSpinning = false
-      })
-    },
-
-    handleTabChange (key, type) {
-      this[type] = key
-    },
-
-    handleTagClose (removeTag) {
-      const tags = this.tags.filter(tag => tag !== removeTag)
-      this.tags = tags
-    },
-
-    showTagInput () {
-      this.tagInputVisible = true
-      this.$nextTick(() => {
-        this.$refs.tagInput.focus()
-      })
-    },
-
-    handleInputChange (e) {
-      this.tagInputValue = e.target.value
-    },
-
-    handleTagInputConfirm () {
-      const inputValue = this.tagInputValue
-      let tags = this.tags
-      if (inputValue && !tags.includes(inputValue)) {
-        tags = [...tags, inputValue]
-      }
-
-      Object.assign(this, {
-        tags,
-        tagInputVisible: false,
-        tagInputValue: ''
-      })
     }
   }
 }

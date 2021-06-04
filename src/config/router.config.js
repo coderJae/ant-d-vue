@@ -113,7 +113,7 @@ export const asyncRouterMap = [
         path: '/supermarket',
         component: () => import('@/views/supermarket/index.vue'),
         name: 'supermarket',
-        meta: { title: 'menu.supermarket', icon: 'shopping-cart', keepAlive: true, permission: ['user'] }
+        meta: { title: 'menu.supermarket', icon: 'shop', keepAlive: true, permission: ['user'] }
       },
 
       // 资料管理
@@ -121,33 +121,29 @@ export const asyncRouterMap = [
         path: '/datum',
         component: () => import('@/views/datum/index.vue'),
         name: 'datum',
-        meta: { title: 'menu.datum', icon: 'database', keepAlive: true, permission: ['user'] }
+        meta: { title: 'menu.datum', icon: 'profile', keepAlive: true, permission: ['user'] }
       },
-
       // 咨询维护
       {
         path: '/information',
         component: () => import('@/views/information/index.vue'),
         name: 'information',
-        meta: { title: 'menu.information', icon: 'paper-clip', keepAlive: true, permission: ['user'] }
+        meta: { title: 'menu.information', icon: 'file-protect', keepAlive: true, permission: ['user'] }
       },
-
       // 平台满意
       {
         path: '/platform',
         component: () => import('@/views/platform/index.vue'),
         name: 'platform',
-        meta: { title: 'menu.platform', icon: 'like', keepAlive: true, permission: ['user'] }
+        meta: { title: 'menu.platform', icon: 'smile', keepAlive: true, permission: ['user'] }
       },
-
       // 统计分析
       {
         path: '/analyse',
         component: () => import('@/views/analyse/index.vue'),
         name: 'analyse',
-        meta: { title: 'menu.analyse', icon: 'bar-chart', keepAlive: true, permission: ['user'] }
+        meta: { title: 'menu.analyse', icon: 'pie-chart', keepAlive: true, permission: ['user'] }
       },
-
       // 系统管理
       {
         path: '/system',
@@ -166,7 +162,7 @@ export const asyncRouterMap = [
           {
             path: '/system/role',
             name: 'role',
-            component: () => import('@/views/system/user/index.vue'),
+            component: () => import('@/views/system/role/index.vue'),
             meta: { title: 'menu.system.role', keepAlive: true, permission: ['user'] }
           },
           {
@@ -183,67 +179,6 @@ export const asyncRouterMap = [
           }
         ]
       }
-
-      // other
-      // {
-      //   path: '/other',
-      //   name: 'otherPage',
-      //   component: PageView,
-      //   meta: { title: '其他组件', icon: 'slack', permission: [ 'dashboard' ] },
-      //   redirect: '/other/icon-selector',
-      //   children: [
-      //     {
-      //       path: '/other/icon-selector',
-      //       name: 'TestIconSelect',
-      //       component: () => import('@/views/other/IconSelectorView'),
-      //       meta: { title: 'IconSelector', icon: 'tool', keepAlive: true, permission: [ 'dashboard' ] }
-      //     },
-      //     {
-      //       path: '/other/list',
-      //       component: RouteView,
-      //       meta: { title: '业务布局', icon: 'layout', permission: [ 'support' ] },
-      //       redirect: '/other/list/tree-list',
-      //       children: [
-      //         {
-      //           path: '/other/list/tree-list',
-      //           name: 'TreeList',
-      //           component: () => import('@/views/other/TreeList'),
-      //           meta: { title: '树目录表格', keepAlive: true }
-      //         },
-      //         {
-      //           path: '/other/list/edit-table',
-      //           name: 'EditList',
-      //           component: () => import('@/views/other/TableInnerEditList'),
-      //           meta: { title: '内联编辑表格', keepAlive: true }
-      //         },
-      //         {
-      //           path: '/other/list/user-list',
-      //           name: 'UserList',
-      //           component: () => import('@/views/other/UserList'),
-      //           meta: { title: '用户列表', keepAlive: true }
-      //         },
-      //         {
-      //           path: '/other/list/role-list',
-      //           name: 'RoleList',
-      //           component: () => import('@/views/other/RoleList'),
-      //           meta: { title: '角色列表', keepAlive: true }
-      //         },
-      //         {
-      //           path: '/other/list/system-role',
-      //           name: 'SystemRole',
-      //           component: () => import('@/views/role/RoleList'),
-      //           meta: { title: '角色列表2', keepAlive: true }
-      //         },
-      //         {
-      //           path: '/other/list/permission-list',
-      //           name: 'PermissionList',
-      //           component: () => import('@/views/other/PermissionList'),
-      //           meta: { title: '权限列表', keepAlive: true }
-      //         }
-      //       ]
-      //     }
-      //   ]
-      // }
     ]
   },
   {

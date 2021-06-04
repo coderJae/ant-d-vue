@@ -49,7 +49,7 @@
         <a-form-model-item label="角色名称：" prop="name">
           <a-input placeholder="请输入角色名称" v-model="form.name"/>
         </a-form-model-item>
-        <a-form-model-item  label="角色编码："  prop="code">
+        <a-form-model-item label="角色编码：" prop="code">
           <a-input placeholder="请输入角色编码" v-model="form.code"/>
         </a-form-model-item>
         <a-form-model-item label="角色授权内容" prop="role">
@@ -89,9 +89,6 @@
 </template>
 
 <script>
-
-import { mapGetters } from 'vuex'
-
 export default {
   data () {
     return {
@@ -215,9 +212,6 @@ export default {
       ]
     }
   },
-  computed: {
-    ...mapGetters(['nickname', 'avatar'])
-  },
   mounted () {
     // this.getTeams()
   },
@@ -235,10 +229,8 @@ export default {
       this.visible = true
     },
     del () {
-
     },
     handleOk () {
-
     },
     onSubmit () {
       this.$refs.ruleForm.validate(valid => {

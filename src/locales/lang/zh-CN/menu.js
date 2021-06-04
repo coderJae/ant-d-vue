@@ -33,7 +33,7 @@ export default {
     'menu.exception.trigger': '触发错误',
     'menu.account': '账号管理',
     'menu.datum': '资料管理',
-    'menu.information': '咨询维护',
+    'menu.information': '咨讯维护',
     'menu.platform': '平台满意',
     'menu.analyse': '统计分析',
     'menu.system': '系统管理',

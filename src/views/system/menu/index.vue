@@ -10,6 +10,46 @@
         <a @click="del(record)"><a-icon type="delete" /> 删除</a>
       </span>
     </a-table>
+    <!-- 新增 编辑 -->
+    <a-modal v-model="visible" :footer="null" title="新增菜单">
+      <a-form-model
+        ref="ruleForm"
+        :model="form"
+        :rules="rules"
+        :label-col="labelCol"
+        :wrapper-col="wrapperCol"
+      >
+        <a-form-model-item label="上级菜单：" prop="parent">
+          <a-tree-select
+            v-model="form.parent"
+            style="width: 100%"
+            :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+            :tree-data="treeData"
+            placeholder="请选择上级菜单"
+            tree-default-expand-all
+          >
+            <!-- <span v-if="key === '0-0-1'" slot="title" slot-scope="{ key, value }" style="color: #08c">
+              Child Node1 {{ value }}
+            </span> -->
+          </a-tree-select>
+        </a-form-model-item>
+        <a-form-model-item label="菜单名称：" prop="name">
+          <a-input placeholder="请输入菜单名称" v-model="form.name"/>
+        </a-form-model-item>
+        <a-form-model-item label="路径：" prop="path">
+          <a-input placeholder="请输入路径" v-model="form.path"/>
+        </a-form-model-item>
+
+        <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
+          <a-button type="primary" @click="onSubmit">
+            确定
+          </a-button>
+          <a-button style="margin-left: 10px;" @click="resetForm">
+            重置
+          </a-button>
+        </a-form-model-item>
+      </a-form-model>
+    </a-modal>
   </a-card>
 </template>
 
@@ -17,6 +57,14 @@
 export default {
   data () {
     return {
+      visible: false,
+      form: {
+        parent: undefined,
+        name: '',
+        path: ''
+      },
+      labelCol: { span: 6 },
+      wrapperCol: { span: 16 },
       columns: [
         {
           title: 'Name',
@@ -93,18 +141,66 @@ export default {
           address: 'Sidney No. 1 Lake Park'
         }
       ],
+      treeData: [
+        {
+          title: '系统管理',
+          value: '0-0',
+          key: '0-0',
+          children: [
+            {
+              title: '菜单管理',
+              value: '0-0-1',
+              key: '0-0-1'
+            },
+            {
+              title: '角色管理',
+              value: '0-0-2',
+              key: '0-0-2'
+            }
+          ]
+        },
+        {
+          title: '超市简介',
+          value: '0-1',
+          key: '0-1'
+        }
+      ],
+      rules: {
+        parent: [
+          { required: true, message: '请选择上级菜单', trigger: 'change' }
+        ],
+        name: [
+          { required: true, message: '请输入机构名称', trigger: 'blur' }
+        ],
+        path: [
+          { required: true, message: '请输入路径', trigger: 'blur' }
+        ]
+      },
       expandedRowKeys: []
     }
   },
   methods: {
     add () {
-
+      this.visible = true
     },
     edit () {
       this.visible = true
     },
     del () {
 
+    },
+    onSubmit () {
+      this.$refs.ruleForm.validate(valid => {
+        if (valid) {
+          alert('submit!')
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    resetForm () {
+      this.$refs.ruleForm.resetFields()
     }
   }
 }

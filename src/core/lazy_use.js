@@ -46,9 +46,10 @@ import {
   Descriptions,
   Space,
   message,
-  notification
+  notification,
+  TreeSelect
 } from 'ant-design-vue'
-import Viser from 'viser-vue'
+// import Viser from 'viser-vue'
 
 // ext library
 import VueCropper from 'vue-cropper'
@@ -101,6 +102,7 @@ Vue.use(Result)
 Vue.use(Statistic)
 Vue.use(Descriptions)
 Vue.use(Space)
+Vue.use(TreeSelect)
 
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$message = message
@@ -110,7 +112,7 @@ Vue.prototype.$success = Modal.success
 Vue.prototype.$error = Modal.error
 Vue.prototype.$warning = Modal.warning
 
-Vue.use(Viser)
+// Vue.use(Viser)
 Vue.use(Dialog) // this.$dialog func
 Vue.use(MultiTab)
 Vue.use(PageLoading)

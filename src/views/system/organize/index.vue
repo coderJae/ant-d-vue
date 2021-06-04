@@ -10,6 +10,29 @@
         <a @click="del(record)"><a-icon type="delete" /> 删除</a>
       </span>
     </a-table>
+    <!-- 新增 编辑 -->
+    <a-modal v-model="visible" :footer="null" title="新增机构">
+      <a-form-model
+        ref="ruleForm"
+        :model="form"
+        :rules="rules"
+        :label-col="labelCol"
+        :wrapper-col="wrapperCol"
+      >
+        <a-form-model-item label="机构名称：" prop="name">
+          <a-input placeholder="请输入机构名称" v-model="form.name"/>
+        </a-form-model-item>
+
+        <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
+          <a-button type="primary" @click="onSubmit">
+            确定
+          </a-button>
+          <a-button style="margin-left: 10px;" @click="resetForm">
+            重置
+          </a-button>
+        </a-form-model-item>
+      </a-form-model>
+    </a-modal>
   </a-card>
 </template>
 
@@ -17,6 +40,12 @@
 export default {
   data () {
     return {
+      visible: false,
+      form: {
+        name: ''
+      },
+      labelCol: { span: 6 },
+      wrapperCol: { span: 16 },
       columns: [
         {
           title: 'Name',
@@ -93,18 +122,36 @@ export default {
           address: 'Sidney No. 1 Lake Park'
         }
       ],
+      rules: {
+        name: [
+          { required: true, message: '请输入机构名称', trigger: 'blur' }
+        ]
+      },
       expandedRowKeys: []
     }
   },
   methods: {
     add () {
-
+      this.visible = true
     },
     edit () {
       this.visible = true
     },
     del () {
 
+    },
+    onSubmit () {
+      this.$refs.ruleForm.validate(valid => {
+        if (valid) {
+          alert('submit!')
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    resetForm () {
+      this.$refs.ruleForm.resetFields()
     }
   }
 }
