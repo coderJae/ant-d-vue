@@ -1,19 +1,19 @@
 <template>
   <div :class="wrpCls">
     <avatar-dropdown :menu="showMenu" :current-user="currentUser" :class="prefixCls" />
-    <select-lang :class="prefixCls" />
+    <!-- <select-lang :class="prefixCls" /> -->
   </div>
 </template>
 
 <script>
 import AvatarDropdown from './AvatarDropdown'
-import SelectLang from '@/components/SelectLang'
+// import SelectLang from '@/components/SelectLang'
 
 export default {
   name: 'RightContent',
   components: {
-    AvatarDropdown,
-    SelectLang
+    AvatarDropdown
+    // ,SelectLang
   },
   props: {
     prefixCls: {
@@ -31,12 +31,16 @@ export default {
     theme: {
       type: String,
       required: true
+    },
+    currentUser: {
+      type: Object,
+      required: true
     }
   },
   data () {
     return {
-      showMenu: true,
-      currentUser: {}
+      showMenu: true
+      // ,currentUser: {}
     }
   },
   computed: {
@@ -48,11 +52,12 @@ export default {
     }
   },
   mounted () {
-    setTimeout(() => {
-      this.currentUser = {
-        name: 'Serati Ma'
-      }
-    }, 1500)
+    // setTimeout(() => {
+    //   this.currentUser = {
+    //     name: 'Admin',
+    //     avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'
+    //   }
+    // }, 1000)
   }
 }
 </script>

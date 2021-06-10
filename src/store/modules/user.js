@@ -37,6 +37,7 @@ const user = {
     Login ({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
+          console.log(response, 'res')
           const result = response.result
           storage.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
           commit('SET_TOKEN', result.token)
@@ -51,8 +52,8 @@ const user = {
     GetInfo ({ commit }) {
       return new Promise((resolve, reject) => {
         getInfo().then(response => {
+          console.log('info')
           const result = response.result
-
           if (result.role && result.role.permissions.length > 0) {
             const role = result.role
             role.permissions = result.role.permissions
@@ -73,6 +74,26 @@ const user = {
           commit('SET_AVATAR', result.avatar)
 
           resolve(response)
+          // const result = response.data
+          // const role = result.role
+          // if (result.roleList) {
+          //   const perList = []
+          //   result.roleList.forEach(r => {
+          //      perList.push(r.code)
+          //   })
+          //   console.log(perList, '角色列表')
+          //   role.permissionList = perList
+
+          //   commit('SET_ROLES', role)
+          //   commit('SET_INFO', result)
+          // } else {
+          //   reject(new Error('getInfo: roles must be a non-null array !'))
+          // }
+
+          // commit('SET_NAME', { name: result.name, welcome: welcome() })
+          // commit('SET_AVATAR', result.avatar)
+
+          // resolve(response)
         }).catch(error => {
           reject(error)
         })
@@ -81,6 +102,7 @@ const user = {
 
     // 登出
     Logout ({ commit, state }) {
+      alert('logout')
       return new Promise((resolve) => {
         logout(state.token).then(() => {
           commit('SET_TOKEN', '')

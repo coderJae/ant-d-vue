@@ -22,7 +22,7 @@
               :placeholder="$t('user.login.username.placeholder')"
               v-decorator="[
                 'username',
-                {rules: [{ required: true, message: $t('user.userName.required') }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
+                {rules: [{ required: true, message: $t('user.userName.required') }, { validator: handleUsernameOrEmail }], initialValue:'admin', validateTrigger: 'change'}
               ]"
             >
               <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -35,7 +35,7 @@
               :placeholder="$t('user.login.password.placeholder')"
               v-decorator="[
                 'password',
-                {rules: [{ required: true, message: $t('user.password.required') }], validateTrigger: 'blur'}
+                {rules: [{ required: true, message: $t('user.password.required') }], initialValue:'admin', validateTrigger: 'blur'}
               ]"
             >
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -50,7 +50,7 @@
                   :placeholder="$t('user.login.yzm.placeholder')"
                   v-decorator="[
                     'yzm',
-                    {rules: [{ required: true, message: $t('user.yzm.required') }], validateTrigger: 'blur'}
+                    {rules: [{ required: true, message: $t('user.yzm.required') }], initialValue:'123', validateTrigger: 'blur'}
                   ]"
                 >
                   <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -269,7 +269,7 @@ export default {
       })
     },
     loginSuccess (res) {
-      console.log(res)
+      console.log(res, 'hahahah')
       // check res.homePage define, set $router.push name res.homePage
       // Why not enter onComplete
       /*

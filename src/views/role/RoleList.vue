@@ -64,8 +64,8 @@
 
 <script>
 import pick from 'lodash.pick'
-import { getRoleList, getPermissions } from '@/api/manage'
-import { actionToObject } from '@/utils/permissions'
+import { getRoleList } from '@/api/manage'
+// import { actionToObject } from '@/utils/permissions'
 import { baseMixin } from '@/store/app-mixin'
 
 export default {
@@ -91,7 +91,7 @@ export default {
       })
       console.log('this.roles', this.roles)
     })
-    this.loadPermissions()
+    // this.loadPermissions()
   },
   methods: {
     callback (val) {
@@ -141,25 +141,26 @@ export default {
         indeterminate: false,
         checkedAll: e.target.checked
       })
-    },
-    loadPermissions () {
-      getPermissions().then(res => {
-        const result = res.result
-        this.permissions = result.map(permission => {
-          const options = actionToObject(permission.actionData)
-          permission.checkedAll = false
-          permission.selected = []
-          permission.indeterminate = false
-          permission.actionsOptions = options.map(option => {
-            return {
-              label: option.describe,
-              value: option.action
-            }
-          })
-          return permission
-        })
-      })
     }
+    // ,
+    // loadPermissions () {
+    //   getPermissions().then(res => {
+    //     const result = res.result
+    //     this.permissions = result.map(permission => {
+    //       const options = actionToObject(permission.actionData)
+    //       permission.checkedAll = false
+    //       permission.selected = []
+    //       permission.indeterminate = false
+    //       permission.actionsOptions = options.map(option => {
+    //         return {
+    //           label: option.describe,
+    //           value: option.action
+    //         }
+    //       })
+    //       return permission
+    //     })
+    //   })
+    // }
   }
 }
 </script>

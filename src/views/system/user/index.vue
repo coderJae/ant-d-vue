@@ -109,6 +109,7 @@
 import { mapGetters } from 'vuex'
 
 export default {
+  name: 'User',
   data () {
     const validatePass = (rule, value, callback) => {
       if (value === '') {
