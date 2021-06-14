@@ -35,33 +35,23 @@
         </a-button>
       </a-form-model-item>
     </a-form-model>
-    <a-table :columns="columns" :data-source="data" :pagination="pagination" @change="tableChange" style="margin-top:30px">
-      <a slot="name" slot-scope="text">{{ text }}</a>
-      <span slot="customTitle"> Name</span>
-      <span slot="tags" slot-scope="tags">
-        <a-tag
-          v-for="tag in tags"
-          :key="tag"
-          :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'"
-        >
-          {{ tag.toUpperCase() }}
-        </a-tag>
+    <a-table :columns="columns" :data-source="data" :pagination="pagination" style="margin-top:30px">
+      <span slot="detail" slot-scope="text" >
+        <a-tooltip placement="top">
+          <template slot="title">
+            <span>{{text}}</span>
+          </template>
+          <span>{{text.substr(0,15)}}</span>
+        </a-tooltip>
       </span>
       <span slot="action" slot-scope="text, record">
-        <a>Invite 一 {{ record.name }}</a>
-        <a-divider type="vertical" />
-        <a>Delete</a>
-        <a-divider type="vertical" />
-        <a class="ant-dropdown-link"> More actions <a-icon type="down" /> </a>
+        <a @click="del(record)"><a-icon type="delete" /> 删除</a>
       </span>
     </a-table>
   </a-card>
 </template>
 
 <script>
-
-import { mapGetters } from 'vuex'
-
 export default {
   data () {
     return {
@@ -78,28 +68,50 @@ export default {
         {
           title: '名称',
           dataIndex: 'name',
-          key: 'name',
-          slots: { title: 'customTitle' },
-          scopedSlots: { customRender: 'name' }
+          key: 'name'
         },
         {
           title: '用户类型',
-          dataIndex: 'age',
-          key: 'age'
+          dataIndex: 'type',
+          key: 'type'
         },
         {
           title: '联系方式',
-          dataIndex: 'address',
-          key: 'address'
+          dataIndex: 'tel',
+          key: 'tel'
         },
         {
-          title: '用户状态',
-          key: 'tags',
-          dataIndex: 'tags',
-          scopedSlots: { customRender: 'tags' }
+          title: '满意度',
+          key: 'satisfy',
+          dataIndex: 'satisfy',
+          customRender: function (text, record, index) {
+               let label
+               switch (text) {
+                   case 0:
+                     label = '不满意'
+                     break
+                   case 1:
+                     label = '一般'
+                     break
+                   case 2:
+                     label = '满意'
+                     break
+                   default:
+                     label = text
+                     break
+               }
+
+               return label
+          }
         },
         {
-          title: 'Action',
+          title: '详情',
+          dataIndex: 'detail',
+          key: 'detail',
+          scopedSlots: { customRender: 'detail' }
+        },
+        {
+          title: '操作',
           key: 'action',
           scopedSlots: { customRender: 'action' }
         }
@@ -107,106 +119,25 @@ export default {
       data: [
         {
           key: '1',
-          name: 'John Brown',
-          age: 32,
-          address: 'New York No. 1 Lake Park',
-          tags: ['nice', 'developer']
-        },
-        {
-          key: '2',
-          name: 'Jim Green',
-          age: 42,
-          address: 'London No. 1 Lake Park',
-          tags: ['loser']
-        },
-        {
-          key: '3',
-          name: 'Joe Black',
-          age: 32,
-          address: 'Sidney No. 1 Lake Park',
-          tags: ['cool', 'teacher']
+          name: '深圳天天向上税务所',
+          type: '机构',
+          tel: '07-1234567',
+          satisfy: 0,
+          detail: '这是满意度详情这是满意度详情这是满意度详情'
         }
       ],
       pagination: {
         total: 1000,
         current: 1,
         pageSize: 10
-      },
-      tagInputVisible: false,
-      tagInputValue: '',
-
-      teams: [],
-      teamSpinning: true,
-
-      tabListNoTitle: [
-        {
-          key: 'article',
-          tab: '文章(8)'
-        },
-        {
-          key: 'app',
-          tab: '应用(8)'
-        },
-        {
-          key: 'project',
-          tab: '项目(8)'
-        }
-      ],
-      noTitleKey: 'app'
+      }
     }
-  },
-  computed: {
-    ...mapGetters(['nickname', 'avatar'])
-  },
-  mounted () {
-    this.getTeams()
   },
   methods: {
     handleSubmit (e) {
       console.log(this.formInline)
     },
-    tableChange (e) {
-      this.pagination.current = e.current
-    },
-    getTeams () {
-      this.$http.get('/workplace/teams').then(res => {
-        this.teams = res.result
-        this.teamSpinning = false
-      })
-    },
-
-    handleTabChange (key, type) {
-      this[type] = key
-    },
-
-    handleTagClose (removeTag) {
-      const tags = this.tags.filter(tag => tag !== removeTag)
-      this.tags = tags
-    },
-
-    showTagInput () {
-      this.tagInputVisible = true
-      this.$nextTick(() => {
-        this.$refs.tagInput.focus()
-      })
-    },
-
-    handleInputChange (e) {
-      this.tagInputValue = e.target.value
-    },
-
-    handleTagInputConfirm () {
-      const inputValue = this.tagInputValue
-      let tags = this.tags
-      if (inputValue && !tags.includes(inputValue)) {
-        tags = [...tags, inputValue]
-      }
-
-      Object.assign(this, {
-        tags,
-        tagInputVisible: false,
-        tagInputValue: ''
-      })
+    del () {
     }
   }
 }

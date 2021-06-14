@@ -1,12 +1,22 @@
 <template>
   <a-card>
-    <div class="topic">超市简介</div>
+    <div class="topic">超市简介 <a-button type="primary" icon="edit" ghost @click="isEdit = !isEdit" style="float:right"> 编辑 </a-button></div></div>
+    <div v-if="!isEdit" v-html="content"></div>
     <editor
+      v-else
       v-model="pushContent"
       :init="init"
       :disabled="disabled"
-      @onClick="onClick">
+      >
     </editor>
+    <div v-if="isEdit"  style="text-align:center;margin-top:30px;">
+      <a-button style="margin-right: 10px;" @click="pushContent = ''">
+        重置
+      </a-button>
+      <a-button type="primary" @click="onSubmit">
+        提交
+      </a-button>
+    </div>
   </a-card>
 </template>
 
@@ -56,6 +66,8 @@ export default {
   },
   data () {
     return {
+      isEdit: false,
+      content: '<p><h1>hello</h1><p>',
       pushContent: '',
       init: {
         language_url: '/tinymce/langs/zh_CN.js',
@@ -93,9 +105,8 @@ export default {
     }
   },
   methods: {
-    onClick (e) {
-      console.log(this.myValue)
-      this.$emit('onClick', e, tinymce)
+    // 保存
+    onSubmit () {
     }
   },
   mounted () {

@@ -19,14 +19,14 @@
       <a-card>
         <div class="theme">
           <span class="title"><a-icon type="retweet" /> 合作达成量</span>
-          <span class="detail" @click="toDetail">详情 <a-icon type="right-circle" /></span>
+          <span class="detail" @click="toDetail('hzdcl')">详情 <a-icon type="right-circle" /></span>
         </div>
         <div id="hzdcl" style="height:400px"></div>
       </a-card>
       <a-card style="margin-top:15px">
         <div class="theme">
           <span class="title"><a-icon type="apartment" /> 机构数量</span>
-          <span class="detail">详情 <a-icon type="right-circle" /></span>
+          <span class="detail" @click="toDetail('fwjg')">详情 <a-icon type="right-circle" /></span>
         </div>
         <div id="jgsl" style="height:400px"></div>
       </a-card>
@@ -36,7 +36,6 @@
             <div class="tp">
               <div class="theme">
                 <span class="title"><a-icon type="usergroup-add" /> 用户分布</span>
-                <span class="detail">详情 <a-icon type="right-circle" /></span>
               </div>
               <div id="yhfb" style="height:300px"></div>
             </div>
@@ -45,7 +44,7 @@
             <div class="bt">
               <div class="theme">
                 <span class="title"><a-icon type="smile" /> 满意度分布</span>
-                <span class="detail">详情 <a-icon type="right-circle" /></span>
+                <span class="detail" @click="toDetail('myd')">详情 <a-icon type="right-circle" /></span>
               </div>
               <div id="mydfb" style="height:300px"></div>
             </div>
@@ -55,7 +54,6 @@
           <a-card>
             <div class="theme">
               <span class="title"><a-icon type="heart" /> 服务分布</span>
-              <span class="detail">详情 <a-icon type="right-circle" /></span>
             </div>
             <div id="fwfb" style="height:690px"></div>
           </a-card>
@@ -64,26 +62,13 @@
     </div>
     <a-card v-show="showDetail">
       <div class="topic">
-        <span class="title">用户管理</span>
+        <span class="title">{{ currentTitle }}</span>
         <a-button type="primary" @click="back">返回</a-button>
       </div>
       <!-- 列表 -->
-      <a-table :columns="columns" :data-source="data" :pagination="pagination" @change="tableChange" style="margin-top:30px">
-        <a slot="name" slot-scope="text">{{ text }}</a>
-        <span slot="customTitle"> Name</span>
-        <span slot="tags" slot-scope="tags">
-          <a-tag
-            v-for="tag in tags"
-            :key="tag"
-            :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'"
-          >
-            {{ tag.toUpperCase() }}
-          </a-tag>
-        </span>
-        <span slot="action" slot-scope="text, record">
-          <a @click="edit(record)"><a-icon type="edit" /> 编辑</a>
-          <a-divider type="vertical" />
-          <a @click="del(record)"><a-icon type="delete" /> 删除</a>
+      <a-table :columns="columns" :data-source="data" :pagination="pagination" style="margin-top:30px">
+        <span slot="doing" slot-scope="text" style="color:green;">
+          {{ text }}
         </span>
       </a-table>
     </a-card>
@@ -117,7 +102,85 @@ export default {
         organize: undefined,
         date: undefined
       },
-      columns: [
+      currentTitle: '',
+      titles: {
+        'hzdcl': '合作达成量',
+        'fwjg': '服务机构数量',
+        'myd': '满意度情况'
+      },
+      columns: [],
+      // 合作达成量
+      hzdclColumns: [
+        {
+          title: '序号',
+          customRender: (text, record, index) => `${(this.pagination.current - 1) * this.pagination.pageSize + index + 1}`
+        },
+        {
+          title: '涉税服务机构',
+          dataIndex: 'name',
+          key: 'name'
+        },
+        {
+          title: '所属税务机关',
+          dataIndex: 'age',
+          key: 'age'
+        },
+        {
+          title: '税务代理人',
+          dataIndex: 'agent',
+          key: 'agent'
+        },
+        {
+          title: '证件类型',
+          key: 'tags',
+          dataIndex: 'tags'
+        },
+        {
+          title: '证件号码',
+          key: 'num',
+          dataIndex: 'num'
+        }
+      ],
+      // 服务机构数量
+      fwjgColumns: [
+        {
+          title: '序号',
+          customRender: (text, record, index) => `${(this.pagination.current - 1) * this.pagination.pageSize + index + 1}`
+        },
+        {
+          title: '涉税服务机构',
+          dataIndex: 'name',
+          key: 'name'
+        },
+        {
+          title: '所属税务机关',
+          dataIndex: 'age',
+          key: 'age'
+        },
+        {
+          title: '代理人数',
+          dataIndex: 'agent',
+          key: 'agent'
+        },
+        {
+          title: '合作达成量',
+          key: 'tags',
+          dataIndex: 'tags'
+        },
+        {
+          title: '已完成',
+          key: 'finish',
+          dataIndex: 'finish'
+        },
+        {
+          title: '进行中',
+          key: 'doing',
+          dataIndex: 'doing',
+          scopedSlots: { customRender: 'doing' }
+        }
+      ],
+      // 满意度列
+      mydColumns: [
         {
           title: '序号',
           customRender: (text, record, index) => `${(this.pagination.current - 1) * this.pagination.pageSize + index + 1}`
@@ -125,55 +188,50 @@ export default {
         {
           title: '名称',
           dataIndex: 'name',
-          key: 'name',
-          slots: { title: 'customTitle' },
-          scopedSlots: { customRender: 'name' }
+          key: 'name'
         },
         {
           title: '用户类型',
-          dataIndex: 'age',
-          key: 'age'
+          dataIndex: 'type',
+          key: 'type'
         },
         {
           title: '联系方式',
-          dataIndex: 'address',
-          key: 'address'
+          dataIndex: 'tel',
+          key: 'tel'
         },
         {
-          title: '用户状态',
-          key: 'tags',
-          dataIndex: 'tags',
-          scopedSlots: { customRender: 'tags' }
+          title: '满意度',
+          key: 'satisfy',
+          dataIndex: 'satisfy',
+          customRender: function (text, record, index) {
+               let label
+               switch (text) {
+                   case 0:
+                     label = '不满意'
+                     break
+                   case 1:
+                     label = '一般'
+                     break
+                   case 2:
+                     label = '满意'
+                     break
+                   default:
+                     label = text
+                     break
+               }
+
+               return label
+          }
         },
         {
-          title: 'Action',
-          key: 'action',
-          scopedSlots: { customRender: 'action' }
+          title: '详情',
+          dataIndex: 'detail',
+          key: 'detail',
+          scopedSlots: { customRender: 'detail' }
         }
       ],
-      data: [
-        {
-          key: '1',
-          name: 'John Brown',
-          age: 32,
-          address: 'New York No. 1 Lake Park',
-          tags: ['nice', 'developer']
-        },
-        {
-          key: '2',
-          name: 'Jim Green',
-          age: 42,
-          address: 'London No. 1 Lake Park',
-          tags: ['loser']
-        },
-        {
-          key: '3',
-          name: 'Joe Black',
-          age: 32,
-          address: 'Sidney No. 1 Lake Park',
-          tags: ['cool', 'teacher']
-        }
-      ],
+      data: [],
       pagination: {
         total: 1000,
         current: 1,
@@ -185,12 +243,36 @@ export default {
     this.initLine()
     this.initBar()
     this.initPie()
-    this.initCirclePie('yhfb')
-    this.initCirclePie('mydfb')
+    this.initCirclePie('yhfb', {
+          data: [
+            {
+              name: '机构数量'
+            }, {
+              name: '普通纳税人'
+            }, {
+              name: '企业数量'
+            }
+          ]
+    })
+    this.initCirclePie('mydfb', {
+          data: [
+            {
+              name: '不满意'
+            }, {
+              name: '满意'
+            }, {
+              name: '一般'
+            }
+          ]
+    })
   },
   methods: {
-   toDetail () {
+   toDetail (label) {
      this.showDetail = true
+     this.currentTitle = this.titles[label]
+     this.columns = this[`${label}Columns`]
+     // 此处异步获取对应数据
+     this.data = []
    },
    back () {
      this.showDetail = false
@@ -364,7 +446,7 @@ export default {
 
       option && myChart.setOption(option)
    },
-   initCirclePie (id) {
+   initCirclePie (id, legend) {
       var chartDom = document.getElementById(id)
       var myChart = echarts.init(chartDom)
       var option
@@ -373,18 +455,13 @@ export default {
         tooltip: {
             trigger: 'item'
         },
+        legend,
+        color: ['#c4deff', '#3465d9', '#0d1f66'],
         series: [
             {
-              name: '访问来源',
               type: 'pie',
               radius: ['40%', '70%'],
-              data: [
-                { value: 1048, name: '搜索引擎' },
-                { value: 735, name: '直接访问' },
-                { value: 580, name: '邮件营销' },
-                { value: 484, name: '联盟广告' },
-                { value: 300, name: '视频广告' }
-              ],
+              data: [1, 2, 3],
               itemStyle: {
                 borderColor: '#fff',
                 borderWidth: 2

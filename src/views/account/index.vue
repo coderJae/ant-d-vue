@@ -36,42 +36,15 @@
       </a-form-model-item>
     </a-form-model>
     <a-table :columns="columns" :data-source="data" :pagination="pagination" @change="tableChange" style="margin-top:30px">
-      <a slot="name" slot-scope="text">{{ text }}</a>
-      <span slot="customTitle"> Name</span>
-      <span slot="tags" slot-scope="tags">
-        <a-tag
-          v-for="tag in tags"
-          :key="tag"
-          :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'"
-        >
-          {{ tag.toUpperCase() }}
-        </a-tag>
-      </span>
-      <span slot="action" slot-scope="text, record">
-        <a>Invite 一 {{ record.name }}</a>
-        <a-divider type="vertical" />
-        <a>Delete</a>
-        <a-divider type="vertical" />
-        <a class="ant-dropdown-link"> More actions <a-icon type="down" /> </a>
+      <span slot="state" slot-scope="text, record">
+        <span style="margin-right:10px;">{{ record.state ? '有效' : '无效' }}</span><a-switch size="small" v-model="record.state"/>
       </span>
     </a-table>
   </a-card>
 </template>
 
 <script>
-import { PageView, RouteView } from '@/layouts'
-import { AppPage, ArticlePage, ProjectPage } from './page'
-
-import { mapGetters } from 'vuex'
-
 export default {
-  components: {
-    RouteView,
-    PageView,
-    AppPage,
-    ArticlePage,
-    ProjectPage
-  },
   data () {
     return {
       formInline: {
@@ -87,53 +60,32 @@ export default {
         {
           title: '名称',
           dataIndex: 'name',
-          key: 'name',
-          slots: { title: 'customTitle' },
-          scopedSlots: { customRender: 'name' }
+          key: 'name'
         },
         {
           title: '用户类型',
-          dataIndex: 'age',
-          key: 'age'
+          dataIndex: 'type',
+          key: 'type'
         },
         {
           title: '联系方式',
-          dataIndex: 'address',
-          key: 'address'
+          dataIndex: 'tel',
+          key: 'tel'
         },
         {
-          title: '用户状态',
-          key: 'tags',
-          dataIndex: 'tags',
-          scopedSlots: { customRender: 'tags' }
-        },
-        {
-          title: 'Action',
-          key: 'action',
-          scopedSlots: { customRender: 'action' }
+          title: '账号状态',
+          key: 'state',
+          dataIndex: 'state',
+          scopedSlots: { customRender: 'state' }
         }
       ],
       data: [
         {
           key: '1',
-          name: 'John Brown',
-          age: 32,
-          address: 'New York No. 1 Lake Park',
-          tags: ['nice', 'developer']
-        },
-        {
-          key: '2',
-          name: 'Jim Green',
-          age: 42,
-          address: 'London No. 1 Lake Park',
-          tags: ['loser']
-        },
-        {
-          key: '3',
-          name: 'Joe Black',
-          age: 32,
-          address: 'Sidney No. 1 Lake Park',
-          tags: ['cool', 'teacher']
+          name: '深圳天天向上税务所',
+          type: '机构',
+          tel: '075-12345678',
+          state: 1
         }
       ],
       pagination: {
@@ -164,12 +116,6 @@ export default {
       noTitleKey: 'app'
     }
   },
-  computed: {
-    ...mapGetters(['nickname', 'avatar'])
-  },
-  mounted () {
-    this.getTeams()
-  },
   methods: {
     handleSubmit (e) {
       console.log(this.formInline)
@@ -177,13 +123,6 @@ export default {
     tableChange (e) {
       this.pagination.current = e.current
     },
-    getTeams () {
-      this.$http.get('/workplace/teams').then(res => {
-        this.teams = res.result
-        this.teamSpinning = false
-      })
-    },
-
     handleTabChange (key, type) {
       this[type] = key
     },

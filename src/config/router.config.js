@@ -103,7 +103,7 @@ export const asyncRouterMap = [
       // 账号管理
       {
         path: '/account',
-        component: () => import('@/views/account/center'),
+        component: () => import('@/views/account/index.vue'),
         name: 'account',
         meta: { title: 'menu.account', icon: 'user', keepAlive: true, permission: ['user'] }
       },

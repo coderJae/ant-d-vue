@@ -105,9 +105,6 @@
 </template>
 
 <script>
-
-import { mapGetters } from 'vuex'
-
 export default {
   name: 'User',
   data () {
@@ -226,12 +223,6 @@ export default {
       }
     }
   },
-  computed: {
-    ...mapGetters(['nickname', 'avatar'])
-  },
-  mounted () {
-    this.getTeams()
-  },
   methods: {
     handleSubmit (e) {
       console.log(this.formInline)
@@ -263,21 +254,6 @@ export default {
     },
     resetForm () {
       this.$refs.ruleForm.resetFields()
-    },
-    getTeams () {
-      this.$http.get('/workplace/teams').then(res => {
-        this.teams = res.result
-        this.teamSpinning = false
-      })
-    },
-
-    handleTabChange (key, type) {
-      this[type] = key
-    },
-
-    handleTagClose (removeTag) {
-      const tags = this.tags.filter(tag => tag !== removeTag)
-      this.tags = tags
     }
   }
 }

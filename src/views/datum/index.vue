@@ -1,29 +1,9 @@
 <template>
   <a-card>
-    <div class="topic">资料管理</div>
+    <div class="topic">资料管理 <a-button type="primary" icon="cloud-upload" ghost @click="visible = true" style="float:right"> 上传 </a-button></div>
     <a-form-model layout="inline" :model="formInline" @submit="handleSubmit" @submit.native.prevent>
       <a-form-model-item>
-        <a-input v-model="formInline.name" placeholder="请输入名称"></a-input>
-      </a-form-model-item>
-      <a-form-model-item>
-        <a-select v-model="formInline.region" style="width:200px" placeholder="请选择用户类型">
-          <a-select-option value="shanghai">
-            Zone one
-          </a-select-option>
-          <a-select-option value="beijing">
-            Zone two
-          </a-select-option>
-        </a-select>
-      </a-form-model-item>
-      <a-form-model-item>
-        <a-select v-model="formInline.state" style="width:200px" placeholder="请选择用户状态">
-          <a-select-option value="shanghai">
-            Zone one
-          </a-select-option>
-          <a-select-option value="beijing">
-            Zone two
-          </a-select-option>
-        </a-select>
+        <a-input v-model="formInline.name" placeholder="请输入资料名称"></a-input>
       </a-form-model-item>
       <a-form-model-item>
         <a-button
@@ -36,25 +16,22 @@
       </a-form-model-item>
     </a-form-model>
     <a-table :columns="columns" :data-source="data" :pagination="pagination" @change="tableChange" style="margin-top:30px">
-      <a slot="name" slot-scope="text">{{ text }}</a>
-      <span slot="customTitle"> Name</span>
-      <span slot="tags" slot-scope="tags">
-        <a-tag
-          v-for="tag in tags"
-          :key="tag"
-          :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'"
-        >
-          {{ tag.toUpperCase() }}
-        </a-tag>
-      </span>
       <span slot="action" slot-scope="text, record">
-        <a>Invite 一 {{ record.name }}</a>
-        <a-divider type="vertical" />
-        <a>Delete</a>
-        <a-divider type="vertical" />
-        <a class="ant-dropdown-link"> More actions <a-icon type="down" /> </a>
+        <a @click="del(record)"><a-icon type="delete" /> 删除</a>
       </span>
     </a-table>
+    <!-- 新增 编辑 -->
+    <a-modal v-model="visible" :footer="null" title="上传文件">
+      <a-upload
+        name="file"
+        :multiple="true"
+        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+        :headers="headers"
+        @change="handleChange"
+      >
+        <a-button> <a-icon type="upload" /> 点击上传文件 </a-button>
+      </a-upload>
+    </a-modal>
   </a-card>
 </template>
 
@@ -62,6 +39,10 @@
 export default {
   data () {
     return {
+      visible: true,
+      headers: {
+        authorization: 'authorization-text' // 获取token
+      },
       formInline: {
         name: '',
         region: undefined,
@@ -73,30 +54,32 @@ export default {
           customRender: (text, record, index) => `${(this.pagination.current - 1) * this.pagination.pageSize + index + 1}`
         },
         {
-          title: '名称',
+          title: '资料名称',
           dataIndex: 'name',
-          key: 'name',
-          slots: { title: 'customTitle' },
-          scopedSlots: { customRender: 'name' }
+          key: 'name'
         },
         {
-          title: '用户类型',
-          dataIndex: 'age',
-          key: 'age'
+          title: '格式',
+          dataIndex: 'format',
+          key: 'format'
         },
         {
-          title: '联系方式',
-          dataIndex: 'address',
-          key: 'address'
+          title: '大小',
+          dataIndex: 'size',
+          key: 'size'
         },
         {
-          title: '用户状态',
-          key: 'tags',
-          dataIndex: 'tags',
-          scopedSlots: { customRender: 'tags' }
+          title: '上传时间',
+          dataIndex: 'uploadTime',
+          key: 'uploadTime'
         },
         {
-          title: 'Action',
+          title: '上传人',
+          dataIndex: 'uploadAuthor',
+          key: 'uploadAuthor'
+        },
+        {
+          title: '操作',
           key: 'action',
           scopedSlots: { customRender: 'action' }
         }
@@ -104,24 +87,11 @@ export default {
       data: [
         {
           key: '1',
-          name: 'John Brown',
-          age: 32,
-          address: 'New York No. 1 Lake Park',
-          tags: ['nice', 'developer']
-        },
-        {
-          key: '2',
-          name: 'Jim Green',
-          age: 42,
-          address: 'London No. 1 Lake Park',
-          tags: ['loser']
-        },
-        {
-          key: '3',
-          name: 'Joe Black',
-          age: 32,
-          address: 'Sidney No. 1 Lake Park',
-          tags: ['cool', 'teacher']
+          name: '文件名',
+          format: 'doc',
+          size: '6M',
+          uploadTime: '2021/05/05 12:20:36',
+          uploadAuthor: '张三'
         }
       ],
       pagination: {
@@ -134,6 +104,16 @@ export default {
   methods: {
     handleSubmit (e) {
       console.log(this.formInline)
+    },
+    handleChange (info) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList)
+      }
+      if (info.file.status === 'done') {
+        this.$message.success(`${info.file.name} file uploaded successfully`)
+      } else if (info.file.status === 'error') {
+        this.$message.error(`${info.file.name} file upload failed.`)
+      }
     }
   }
 }
